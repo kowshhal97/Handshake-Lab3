@@ -6,6 +6,7 @@ const Student=require("./../models/student")
 
 getStudentById=async(_id)=>{
     try {
+        console.log(_id)
         const user = await Student.findById(_id)
         
       return user

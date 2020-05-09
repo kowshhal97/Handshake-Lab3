@@ -46,6 +46,9 @@ const Education = new GraphQLObjectType({
 const Student = new GraphQLObjectType({
     name: 'student',
     fields: () => ({
+        _id:{
+type:GraphQLString
+        },
         name: {
             type: GraphQLString
         },
@@ -83,7 +86,6 @@ const Student = new GraphQLObjectType({
             type: new GraphQLList(Education),
             description: "Education details of a Student"
         }
-
     })
 
 })
@@ -102,12 +104,17 @@ const RootQueryType = new GraphQLObjectType({
             }
         },
         student: {
-            type: new GraphQLObjectType(Student),
+            type: Student,
             description: "Get Student By Id",
-            resolve: (parent, args) => {
+            args:{
+                id:{
+                    type:new GraphQLNonNull(GraphQLString)
+                }
+            },
+            resolve: (parent,args) => {
                 return getStudentById(args.id)
             }
-        },
+        }
         // employer:{
 
         // },
