@@ -14,6 +14,11 @@ const getAllStudents = require('./Query Resolvers/getAllStudents')
 
 const getStudentById = require('./Query Resolvers/getStudentById')
 
+const getEmployerById = require('./Query Resolvers/getEmployerById')
+
+const getAllJobs=require('./Query Resolvers/getAllJobs');
+
+const getJobsId=require('./Query Resolvers/getJobsById')
 
 const Employer = new GraphQLObjectType({
     name: "employer",
@@ -162,6 +167,10 @@ const Student = new GraphQLObjectType({
         major: {
             type: GraphQLString
         },
+        cgpa:{
+type:GraphQLString
+        },
+        
         collegeName: {
             type: GraphQLString
         },
@@ -261,14 +270,14 @@ const RootQueryType = new GraphQLObjectType({
                 }
             },
             resolve: (parent, args) => {
-                return getStudentById(args.id)
+                return getStudentById(args.id);
             }
         },
         jobs: {
             type: new GraphQLList(Job),
             description: "List of all Jobs",
             resolve: () => {
-                return null
+                return getAllJobs();
             }
         },
         job: {
@@ -279,19 +288,20 @@ const RootQueryType = new GraphQLObjectType({
                     type: new GraphQLNonNull(GraphQLString)
                 }
             }, resolve: (parent, args) => {
-                return null;
+                return getJobsId(args.id)
             }
         },
         employee: {
             type: Employer,
-            description: "get Employer By Id",
+            description: "get Employer By Name",
             args: {
-                id: {
+                name: {
                     type: new GraphQLNonNull(GraphQLString)
                 }
             },
             resolve: (parent, args) => {
-                return null
+
+                return getEmployerById(args.name)
             }
         }
     })
