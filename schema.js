@@ -42,6 +42,32 @@ const Education = new GraphQLObjectType({
     })
 })
 
+const Experience = new GraphQLObjectType({
+    name: 'experience',
+    fields: () => ({
+        id: {
+            type: GraphQLString
+        },
+        company_name: {
+            type: GraphQLString
+        },
+        designation: {
+            type: GraphQLString
+        },
+        company_location: {
+            type: GraphQLString
+        },
+        work_summary: {
+            type: GraphQLString
+        },
+        starting_date: {
+            type: GraphQLString
+        },
+        ending_date: {
+            type: GraphQLString
+        }
+    })
+})
 
 const Student = new GraphQLObjectType({
     name: 'student',
@@ -85,6 +111,10 @@ type:GraphQLString
         education: {
             type: new GraphQLList(Education),
             description: "Education details of a Student"
+        },
+        experience:{
+            type:new GraphQLList(Experience),
+            description:"Experience details of a student"
         }
     })
 
