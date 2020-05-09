@@ -69,11 +69,56 @@ const Experience = new GraphQLObjectType({
     })
 })
 
+const Applications = new GraphQLObjectType({
+    name: 'applications',
+    fields: () => ({
+        _id: {
+            type: GraphQLString
+        },
+        applicationId: {
+            type: GraphQLString
+        },
+        status: {
+            type: GraphQLString
+        },
+        companyName: {
+            type: GraphQLString
+        },
+        job_title: {
+            type: GraphQLString
+        },
+        job_location: {
+            type: GraphQLString
+        },
+        job_salary: {
+            type: GraphQLString
+        },
+        job_description: {
+            type: GraphQLString
+        },
+        job_category: {
+            type: GraphQLString
+        },
+        job_posting_date: {
+            type: GraphQLString
+        },
+        job_application_deadline: {
+            type: GraphQLString
+        },
+        job_requirements: {
+            type: GraphQLString
+        },
+        application_date: {
+            type: GraphQLString
+        }
+    })
+})
+
 const Student = new GraphQLObjectType({
     name: 'student',
     fields: () => ({
-        _id:{
-type:GraphQLString
+        _id: {
+            type: GraphQLString
         },
         name: {
             type: GraphQLString
@@ -112,9 +157,13 @@ type:GraphQLString
             type: new GraphQLList(Education),
             description: "Education details of a Student"
         },
-        experience:{
-            type:new GraphQLList(Experience),
-            description:"Experience details of a student"
+        experience: {
+            type: new GraphQLList(Experience),
+            description: "Experience details of a student"
+        },
+        applications:{
+            type:new GraphQLList(Applications),
+            description:"All applied Jobs"
         }
     })
 
@@ -136,12 +185,12 @@ const RootQueryType = new GraphQLObjectType({
         student: {
             type: Student,
             description: "Get Student By Id",
-            args:{
-                id:{
-                    type:new GraphQLNonNull(GraphQLString)
+            args: {
+                id: {
+                    type: new GraphQLNonNull(GraphQLString)
                 }
             },
-            resolve: (parent,args) => {
+            resolve: (parent, args) => {
                 return getStudentById(args.id)
             }
         }
