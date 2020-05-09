@@ -1,0 +1,25 @@
+{
+  "name": "handshake-lab3",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kowshhal97/Handshake-Lab3.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kowshhal97/Handshake-Lab3/issues"
+  },
+  "homepage": "https://github.com/kowshhal97/Handshake-Lab3#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "express-graphql": "^0.9.0",
+    "graphql": "^15.0.0",
+    "mongoose": "^5.9.13"
+  }
+}
