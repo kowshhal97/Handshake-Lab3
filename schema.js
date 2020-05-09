@@ -15,6 +15,33 @@ const getAllStudents = require('./Query Resolvers/getAllStudents')
 const getStudentById = require('./Query Resolvers/getStudentById')
 
 
+const Employer = new GraphQLObjectType({
+    name: "employer",
+    fields: () => ({
+        _id: {
+            type: GraphQLString
+        },
+        name: {
+            type: GraphQLString
+        },
+        email: {
+            type: GraphQLString
+        },
+        password: {
+            type: GraphQLString
+        },
+        location: {
+            type: GraphQLString
+        },
+        description: {
+            type: GraphQLString
+        },
+        contactNumber: {
+            type: GraphQLString
+        }
+    })
+})
+
 const Education = new GraphQLObjectType({
     name: 'education',
     fields: () => ({
@@ -120,6 +147,9 @@ const Student = new GraphQLObjectType({
         _id: {
             type: GraphQLString
         },
+        studentId: {
+            type: GraphQLString
+        },
         name: {
             type: GraphQLString
         },
@@ -161,14 +191,54 @@ const Student = new GraphQLObjectType({
             type: new GraphQLList(Experience),
             description: "Experience details of a student"
         },
-        applications:{
-            type:new GraphQLList(Applications),
-            description:"All applied Jobs"
+        applications: {
+            type: new GraphQLList(Applications),
+            description: "All applied Jobs"
         }
     })
 
 })
 
+
+
+const Job = new GraphQLObjectType({
+    name: "job",
+    fields: () => ({
+        companyName: {
+            type: GraphQLString
+        },
+        job_title: {
+            type: GraphQLString
+        },
+        job_posting_date: {
+            type: GraphQLString
+        },
+        job_application_deadline: {
+            type: GraphQLString
+        },
+        job_location: {
+            type: GraphQLString
+        },
+        job_salary: {
+            type: GraphQLString
+        },
+        job_description: {
+            type: GraphQLString
+        },
+        job_category: {
+            type: GraphQLString
+        },
+        job_requirements: {
+            type: GraphQLString
+        },
+        students: {
+            type: new GraphQLList(Student),
+            description: "All students who applied for the jobs"
+        },
+
+
+    })
+})
 
 
 const RootQueryType = new GraphQLObjectType({
@@ -193,13 +263,37 @@ const RootQueryType = new GraphQLObjectType({
             resolve: (parent, args) => {
                 return getStudentById(args.id)
             }
+        },
+        jobs: {
+            type: new GraphQLList(Job),
+            description: "List of all Jobs",
+            resolve: () => {
+                return null
+            }
+        },
+        job: {
+            type: Job,
+            description: "get Job By Id",
+            args: {
+                id: {
+                    type: new GraphQLNonNull(GraphQLString)
+                }
+            }, resolve: (parent, args) => {
+                return null;
+            }
+        },
+        employee: {
+            type: Employer,
+            description: "get Employer By Id",
+            args: {
+                id: {
+                    type: new GraphQLNonNull(GraphQLString)
+                }
+            },
+            resolve: (parent, args) => {
+                return null
+            }
         }
-        // employer:{
-
-        // },
-        // jobs:{
-
-        // }
     })
 })
 
