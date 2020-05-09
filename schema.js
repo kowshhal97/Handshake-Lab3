@@ -20,6 +20,8 @@ const getAllJobs=require('./Query Resolvers/getAllJobs');
 
 const getJobsId=require('./Query Resolvers/getJobsById')
 
+const updateStudentById=require('./Mutations/updateStudent')
+
 const Employer = new GraphQLObjectType({
     name: "employer",
     fields: () => ({
@@ -250,6 +252,29 @@ const Job = new GraphQLObjectType({
 })
 
 
+
+const RootMutationType=new GraphQLObjectType({
+    name:'Mutation',
+    description:"Root Mutation",
+    fields:()=>({
+        updateStudent:{
+            type:Student,
+            description:'Update Student',
+            args:{
+                student:{
+                    type:Student
+                },
+                id:{
+                    type:GraphQLString
+                }
+            },
+            resolve:()=>{
+                return updateStudentById(args.id,args.student)
+            }
+        }
+    })
+})
+
 const RootQueryType = new GraphQLObjectType({
     name: "Query",
     description: "Root Query",
@@ -309,7 +334,8 @@ const RootQueryType = new GraphQLObjectType({
 
 
 const schema = new GraphQLSchema({
-    query: RootQueryType
+    query: RootQueryType,
+    mutation:RootMutationType
 })
 
 
