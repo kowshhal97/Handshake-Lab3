@@ -27,7 +27,7 @@ const updateEmployerById = require('./Mutations/updateCompanyById')
 
 const postJob = require('./Mutations/postJob')
 
-const getJobsByCompanyName=require('./Query Resolvers/getJobsByCompanyName')
+const getJobsByCompanyName = require('./Query Resolvers/getJobsByCompanyName')
 
 const Employer = new GraphQLObjectType({
     name: "employer",
@@ -319,18 +319,19 @@ const RootQueryType = new GraphQLObjectType({
                 return getEmployerById(args.name)
             }
         },
-        getJobsByCompanyName:{
-            type:Job,
-            description:"get Jobs By Company Name",
-            args:{
+        getJobsByCompanyName: {
+            type: new GraphQLList(Job),
+            description: "get Jobs By Company Name",
+            args: {
                 name: {
                     type: new GraphQLNonNull(GraphQLString)
                 }
+            },
+            resolve: async (parent, args) => {
+                 return getJobsByCompanyName(args.name)
             }
-        },
-        resolve:(parent,args)=>{
-            return getJobsByCompanyName(args.name)
         }
+
     })
 })
 
@@ -544,7 +545,7 @@ const JobPostInput = new GraphQLInputObjectType({
             type: GraphQLString
         },
         students: {
-            type: new GraphQLList(Student),
+            type: new GraphQLList(StudentInputType),
             description: "All students who applied for the jobs"
         }
     })
