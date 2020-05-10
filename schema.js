@@ -29,6 +29,10 @@ const postJob = require('./Mutations/postJob')
 
 const getJobsByCompanyName = require('./Query Resolvers/getJobsByCompanyName')
 
+const applyToJob=require('./Mutations/applyToCompany')
+
+const updateStatus=require('./Mutations/updateApplicationStatus')
+
 const Employer = new GraphQLObjectType({
     name: "employer",
     fields: () => ({
@@ -597,6 +601,24 @@ const RootMutationType = new GraphQLObjectType({
             },
             resolve: (parent, args) => {
                 postJob(args.jobPost)
+            }
+        },
+        applyToJob:{
+            type:Student,
+            description:"Apply to Job posting by Id",
+            args:{
+                student:{
+                    type:StudentInputType
+                },
+                jobId:{
+                    type:GraphQLString
+                },
+                application_date:{
+                    type:GraphQLString
+                }
+            },
+            resolve:(psrent,args)=>{
+
             }
         }
     })
