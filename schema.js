@@ -17,11 +17,11 @@ const getStudentById = require('./Query Resolvers/getStudentById')
 
 const getEmployerById = require('./Query Resolvers/getEmployerById')
 
-const getAllJobs=require('./Query Resolvers/getAllJobs');
+const getAllJobs = require('./Query Resolvers/getAllJobs');
 
-const getJobsId=require('./Query Resolvers/getJobsById')
+const getJobsId = require('./Query Resolvers/getJobsById')
 
-const updateStudentById=require('./Mutations/updateStudent')
+const updateStudentById = require('./Mutations/updateStudent')
 
 const Employer = new GraphQLObjectType({
     name: "employer",
@@ -170,10 +170,10 @@ const Student = new GraphQLObjectType({
         major: {
             type: GraphQLString
         },
-        cgpa:{
-            type:GraphQLString
+        cgpa: {
+            type: GraphQLString
         },
-        
+
         collegeName: {
             type: GraphQLString
         },
@@ -313,51 +313,51 @@ const RootQueryType = new GraphQLObjectType({
     })
 })
 
-const applicationInputType=new GraphQLInputObjectType({
-name:"ApplicationsInput",
-fields:()=>({
-    applicationId: {
-        type: GraphQLString
-    },
-    status: {
-        type: GraphQLString
-    },
-    companyName: {
-        type: GraphQLString
-    },
-    job_title: {
-        type: GraphQLString
-    },
-    job_location: {
-        type: GraphQLString
-    },
-    job_salary: {
-        type: GraphQLString
-    },
-    job_description: {
-        type: GraphQLString
-    },
-    job_category: {
-        type: GraphQLString
-    },
-    job_posting_date: {
-        type: GraphQLString
-    },
-    job_application_deadline: {
-        type: GraphQLString
-    },
-    job_requirements: {
-        type: GraphQLString
-    },
-    application_date: {
-        type: GraphQLString
-    }
-})
+const applicationInputType = new GraphQLInputObjectType({
+    name: "ApplicationsInput",
+    fields: () => ({
+        applicationId: {
+            type: GraphQLString
+        },
+        status: {
+            type: GraphQLString
+        },
+        companyName: {
+            type: GraphQLString
+        },
+        job_title: {
+            type: GraphQLString
+        },
+        job_location: {
+            type: GraphQLString
+        },
+        job_salary: {
+            type: GraphQLString
+        },
+        job_description: {
+            type: GraphQLString
+        },
+        job_category: {
+            type: GraphQLString
+        },
+        job_posting_date: {
+            type: GraphQLString
+        },
+        job_application_deadline: {
+            type: GraphQLString
+        },
+        job_requirements: {
+            type: GraphQLString
+        },
+        application_date: {
+            type: GraphQLString
+        }
+    })
 })
 
-const experienceInputType=new GraphQLInputObjectType({
-    name:"ExperienceInput",
-    fields:()=>({
+const experienceInputType = new GraphQLInputObjectType({
+    name: "ExperienceInput",
+    fields: () => ({
         id: {
             type: GraphQLString
         },
@@ -382,9 +382,9 @@ const experienceInputType=new GraphQLInputObjectType({
     })
 })
 
-const educationInputType=new GraphQLInputObjectType({
-    name:"EducationInput",
-    fields:()=>({
+const educationInputType = new GraphQLInputObjectType({
+    name: "EducationInput",
+    fields: () => ({
         id: {
             type: GraphQLString
         },
@@ -409,9 +409,9 @@ const educationInputType=new GraphQLInputObjectType({
     })
 })
 
-const StudentInputType=new GraphQLInputObjectType({
-    name:"studentInput",
-    fields:()=>({
+const StudentInputType = new GraphQLInputObjectType({
+    name: "studentInput",
+    fields: () => ({
         studentId: {
             type: GraphQLString
         },
@@ -427,10 +427,10 @@ const StudentInputType=new GraphQLInputObjectType({
         major: {
             type: GraphQLString
         },
-        cgpa:{
-            type:GraphQLString
+        cgpa: {
+            type: GraphQLString
         },
-        
+
         collegeName: {
             type: GraphQLString
         },
@@ -467,25 +467,54 @@ const StudentInputType=new GraphQLInputObjectType({
     })
 })
 
+const EmployerInput = new GraphQLInputObjectType({
+    name: "Employer input",
+    fields: () => ({
+        name: {
+            type: GraphQLString
+        },
+        email: {
+            type: GraphQLString
+        },
+        password: {
+            type: GraphQLString
+        },
+        location: {
+            type: GraphQLString
+        },
+        description: {
+            type: GraphQLString
+        },
+        contactNumber: {
+            type: GraphQLString
+        }
+    })
 
-const RootMutationType=new GraphQLObjectType({
-    name:'Mutation',
-    description:"Root Mutation",
-    fields:()=>({
-        updateStudent:{
-            type:Student,
-            description:'Update Student',
-            args:{
-                student:{
-                    type:StudentInputType
+})
+
+
+const RootMutationType = new GraphQLObjectType({
+    name: 'Mutation',
+    description: "Root Mutation",
+    fields: () => ({
+        updateStudent: {
+            type: Student,
+            description: 'Update Student',
+            args: {
+                student: {
+                    type: StudentInputType
                 },
-                id:{
-                    type:GraphQLString
+                id: {
+                    type: GraphQLString
                 }
             },
-            resolve:()=>{
-                return updateStudentById(args.id,args.student)
+            resolve: (parent, args) => {
+                return updateStudentById(args.id, args.student)
             }
+        },
+        updateEmployer: {
+            type: Employer,
+            description: "Update Company By Id",
         }
     })
 })
@@ -494,7 +523,7 @@ const RootMutationType=new GraphQLObjectType({
 
 const schema = new GraphQLSchema({
     query: RootQueryType,
-    mutation:RootMutationType
+    mutation: RootMutationType
 })
 
 
