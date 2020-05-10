@@ -438,6 +438,9 @@ const educationInputType = new GraphQLInputObjectType({
 const StudentInputType = new GraphQLInputObjectType({
     name: "studentInput",
     fields: () => ({
+        _id:{
+            type:GraphQLString
+        },
         studentId: {
             type: GraphQLString
         },
@@ -617,9 +620,22 @@ const RootMutationType = new GraphQLObjectType({
                     type:GraphQLString
                 }
             },
-            resolve:(psrent,args)=>{
-
+            resolve:(parent,args)=>{
+                applyToJob(args.student,args.jobId,args.application_date)
             }
+        },
+        updateApplicationStatus:{
+            type:Student,
+            description:"Update application status of a student",
+            args:{
+                applicationId:{
+                    type:GraphQLString
+                },
+                student:{
+                    type:StudentInputType
+                }
+            }
+
         }
     })
 })
