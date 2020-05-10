@@ -29,9 +29,17 @@ const postJob = require('./Mutations/postJob')
 
 const getJobsByCompanyName = require('./Query Resolvers/getJobsByCompanyName')
 
-const applyToJob=require('./Mutations/applyToCompany')
+const applyToJob = require('./Mutations/applyToCompany')
 
-const updateStatus=require('./Mutations/updateApplicationStatus')
+const updateStatus = require('./Mutations/updateApplicationStatus')
+
+const {
+    login:studentLogin, signup:studentSignUp
+} = require('./Mutations/studentAuth')
+
+const {
+    login:employeeLogin, signup:employeeSignUp
+} = require('./Mutations/companyAuth')
 
 const Employer = new GraphQLObjectType({
     name: "employer",
@@ -332,7 +340,7 @@ const RootQueryType = new GraphQLObjectType({
                 }
             },
             resolve: async (parent, args) => {
-                 return getJobsByCompanyName(args.name)
+                return getJobsByCompanyName(args.name)
             }
         }
 
@@ -438,8 +446,8 @@ const educationInputType = new GraphQLInputObjectType({
 const StudentInputType = new GraphQLInputObjectType({
     name: "studentInput",
     fields: () => ({
-        _id:{
-            type:GraphQLString
+        _id: {
+            type: GraphQLString
         },
         studentId: {
             type: GraphQLString
@@ -558,6 +566,33 @@ const JobPostInput = new GraphQLInputObjectType({
     })
 })
 
+// const studentAuth=new GraphQLInputObjectType({
+//     name:"studentAuth",
+//     fields:({
+//         email:{
+//             type:GraphQLString
+//         },
+//         password:{
+//             type:GraphQLString
+//         },
+//         name:{
+//             type:GraphQLString
+//         },
+//         collegeName:{
+//             type:GraphQLString
+//         },
+//         major:{
+//             type:GraphQLString
+//         },
+//         contactNumber:{
+//             type:GraphQLString
+//         },
+//         dateOfBirth:{
+//             type:GraphQLString
+//         }
+//     })
+// })
+
 
 const RootMutationType = new GraphQLObjectType({
     name: 'Mutation',
@@ -606,37 +641,85 @@ const RootMutationType = new GraphQLObjectType({
                 postJob(args.jobPost)
             }
         },
-        applyToJob:{
-            type:Student,
-            description:"Apply to Job posting by Id",
-            args:{
-                student:{
-                    type:StudentInputType
+        applyToJob: {
+            type: Student,
+            description: "Apply to Job posting by Id",
+            args: {
+                student: {
+                    type: StudentInputType
                 },
-                jobId:{
-                    type:GraphQLString
+                jobId: {
+                    type: GraphQLString
                 },
-                application_date:{
-                    type:GraphQLString
+                application_date: {
+                    type: GraphQLString
                 }
             },
-            resolve:(parent,args)=>{
-                applyToJob(args.student,args.jobId,args.application_date)
+            resolve: (parent, args) => {
+                applyToJob(args.student, args.jobId, args.application_date)
             }
         },
-        updateApplicationStatus:{
-            type:Student,
-            description:"Update application status of a student",
-            args:{
-                applicationId:{
-                    type:GraphQLString
+        updateApplicationStatus: {
+            type: Student,
+            description: "Update application status of a student",
+            args: {
+                applicationId: {
+                    type: GraphQLString
                 },
-                student:{
-                    type:StudentInputType
+                student: {
+                    type: StudentInputType
                 }
             }
+        },
+        studentLogin: {
+            type: Student,
+            description: "Student Login",
+            args: {
+                studentDetails: {
+                    type: StudentInputType
+                }
+            },
+            resolve: (parent, args) => {
+                studentLogin(args.studentDetails)
+            }
+        },
+        studentSignUp: {
+            type: Student,
+            description: "Student Signup",
+            args: {
+                studentDetails: {
+                    type: StudentInputType
+                }
+            },
+            resolve: (parent, args) => {
+                studentSignUp(args.studentDetails)
+            }
+        },
+        companyLogin: {
+            type: Employer,
+            description: "Employee Login",
+            args: {
+                employeeDetails: {
+                    type: EmployerInput
+                }
+            },
+            resolve: (parent, args) => {
+                studentLogin(args.employeeDetails)
+            }
+        },
+        companySignUp: {
+            type: Employer,
+            description: "Employee SingUp",
+            args: {
+                employeeDetails: {
+                    type: EmployerInput
+                }
+            },
+            resolve: (parent, args) => {
+                studentSignUp(args.employeeDetails)
+            }
+        },
 
-        }
     })
 })
 

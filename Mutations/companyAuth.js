@@ -5,9 +5,15 @@ const login = async (loginDetails) => {
     var res = {}
     try {
         const user = await Employer.findOne(loginDetails)
+        if(!user){
+            throw "user not found"
+        }
+        else if(loginDetails.password!=user.password){
+            throw "Wrong password"
+        }
         return user;
     } catch (e) {
-        console.log(e)
+        throw e
     }
 
 }
@@ -20,7 +26,6 @@ const signup = async (signupDetails) => {
     } catch (e) {
         console.log(e)
     }
-
 }
 
 module.exports=login
