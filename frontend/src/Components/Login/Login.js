@@ -7,7 +7,6 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import './Login.css'
 import axios from 'axios';
-import {connect} from 'react-redux'
 
 import PropTypes from 'prop-types';
 import {withStyles} from '@material-ui/core/styles';
@@ -132,20 +131,6 @@ SimpleTabs.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-const mapDispatchToProps = dispatch => {
-    return ({
-        onLogout: () => dispatch({type: 'LOGOUT'}),
-        onLogin: (value, user) => dispatch({type: 'LOGIN', value: value, user: user})
-    });
-};
-
-const mapStateToProps = state => {
-    return {
-        isLoggedIn: state.isLoggedIn,
-        userType: state.userType,
-        user: state.user
-    };
-};
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(SimpleTabs));
+export default (withStyles(styles)(SimpleTabs));
