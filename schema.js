@@ -23,9 +23,11 @@ const getJobsId = require('./Query Resolvers/getJobsById')
 
 const updateStudentById = require('./Mutations/updateStudent')
 
-const updateEmployerById=require('./Mutations/updateCompanyById')
+const updateEmployerById = require('./Mutations/updateCompanyById')
 
-const postJob=require('./Mutations/postJob')
+const postJob = require('./Mutations/postJob')
+
+const getJobsByCompanyName=require('./Query Resolvers/getJobsByCompanyName')
 
 const Employer = new GraphQLObjectType({
     name: "employer",
@@ -220,8 +222,8 @@ const Student = new GraphQLObjectType({
 const Job = new GraphQLObjectType({
     name: "job",
     fields: () => ({
-        _id:{
-            type:GraphQLString
+        _id: {
+            type: GraphQLString
         },
         companyName: {
             type: GraphQLString
@@ -316,6 +318,18 @@ const RootQueryType = new GraphQLObjectType({
 
                 return getEmployerById(args.name)
             }
+        },
+        getJobsByCompanyName:{
+            type:Job,
+            description:"get Jobs By Company Name",
+            args:{
+                name: {
+                    type: new GraphQLNonNull(GraphQLString)
+                }
+            }
+        },
+        resolve:(parent,args)=>{
+            return getJobsByCompanyName(args.name)
         }
     })
 })
@@ -499,9 +513,9 @@ const EmployerInput = new GraphQLInputObjectType({
 
 })
 
-const JobPostInput=new GraphQLInputObjectType({
-    name:"PostJob",
-    fields:({
+const JobPostInput = new GraphQLInputObjectType({
+    name: "PostJob",
+    fields: ({
         companyName: {
             type: GraphQLString
         },
@@ -546,11 +560,11 @@ const RootMutationType = new GraphQLObjectType({
             description: 'Update Student',
             args: {
                 student: {
-                    
-                    type:new GraphQLNonNull(StudentInputType)
+
+                    type: new GraphQLNonNull(StudentInputType)
                 },
                 id: {
-                    type:new GraphQLNonNull(GraphQLString)
+                    type: new GraphQLNonNull(GraphQLString)
                 }
             },
             resolve: (parent, args) => {
@@ -560,27 +574,27 @@ const RootMutationType = new GraphQLObjectType({
         updateEmployer: {
             type: Employer,
             description: "UpdateCompany",
-            args:{
-                employer:{
-                    type:new GraphQLNonNull(EmployerInput)
+            args: {
+                employer: {
+                    type: new GraphQLNonNull(EmployerInput)
                 },
-                id:{
-                    type:new GraphQLNonNull(GraphQLString)
+                id: {
+                    type: new GraphQLNonNull(GraphQLString)
                 }
             },
-            resolve:(parent,args)=>{
-                return updateEmployerById(args.id,args.employer)
+            resolve: (parent, args) => {
+                return updateEmployerById(args.id, args.employer)
             }
         },
-        Postjob:{
-            type:Job,
-            description:"Post Job",
-            args:{
-                jobPost:{
-                    type:new GraphQLNonNull(JobPostInput)
+        Postjob: {
+            type: Job,
+            description: "Post Job",
+            args: {
+                jobPost: {
+                    type: new GraphQLNonNull(JobPostInput)
                 }
             },
-            resolve:(parent,args)=>{
+            resolve: (parent, args) => {
                 postJob(args.jobPost)
             }
         }
