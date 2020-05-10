@@ -23,6 +23,10 @@ const getJobsId = require('./Query Resolvers/getJobsById')
 
 const updateStudentById = require('./Mutations/updateStudent')
 
+const updateEmployerById=require('./Mutations/updateCompanyById')
+
+const postJob=require('./Mutations/postJob')
+
 const Employer = new GraphQLObjectType({
     name: "employer",
     fields: () => ({
@@ -216,6 +220,9 @@ const Student = new GraphQLObjectType({
 const Job = new GraphQLObjectType({
     name: "job",
     fields: () => ({
+        _id:{
+            type:GraphQLString
+        },
         companyName: {
             type: GraphQLString
         },
@@ -492,6 +499,43 @@ const EmployerInput = new GraphQLInputObjectType({
 
 })
 
+const JobPostInput=new GraphQLInputObjectType({
+    name:"PostJob",
+    fields:({
+        companyName: {
+            type: GraphQLString
+        },
+        job_title: {
+            type: GraphQLString
+        },
+        job_posting_date: {
+            type: GraphQLString
+        },
+        job_application_deadline: {
+            type: GraphQLString
+        },
+        job_location: {
+            type: GraphQLString
+        },
+        job_salary: {
+            type: GraphQLString
+        },
+        job_description: {
+            type: GraphQLString
+        },
+        job_category: {
+            type: GraphQLString
+        },
+        job_requirements: {
+            type: GraphQLString
+        },
+        students: {
+            type: new GraphQLList(Student),
+            description: "All students who applied for the jobs"
+        }
+    })
+})
+
 
 const RootMutationType = new GraphQLObjectType({
     name: 'Mutation',
@@ -523,6 +567,21 @@ const RootMutationType = new GraphQLObjectType({
                 id:{
                     type:new GraphQLNonNull(GraphQLString)
                 }
+            },
+            resolve:(parent,args)=>{
+                return updateEmployerById(args.id,args.employer)
+            }
+        },
+        Postjob:{
+            type:Job,
+            description:"Post Job",
+            args:{
+                jobPost:{
+                    type:new GraphQLNonNull(JobPostInput)
+                }
+            },
+            resolve:(parent,args)=>{
+                postJob(args.jobPost)
             }
         }
     })
