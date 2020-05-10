@@ -33,13 +33,13 @@ const applyToJob = require('./Mutations/applyToCompany')
 
 const updateStatus = require('./Mutations/updateApplicationStatus')
 
-const {
-    login:studentLogin, signup:studentSignUp
-} = require('./Mutations/studentAuth')
+const studentLogin = require('./Mutations/studentLogin')
 
-const {
-    login:employeeLogin, signup:employeeSignUp
-} = require('./Mutations/companyAuth')
+const studentSignUp = require('./Mutations/companySignUp')
+
+const employeeLogin = require('./Mutations/companyLogin')
+
+const employeeSignUp=require('./Mutations/companySignUp')
 
 const Employer = new GraphQLObjectType({
     name: "employer",
@@ -566,34 +566,6 @@ const JobPostInput = new GraphQLInputObjectType({
     })
 })
 
-// const studentAuth=new GraphQLInputObjectType({
-//     name:"studentAuth",
-//     fields:({
-//         email:{
-//             type:GraphQLString
-//         },
-//         password:{
-//             type:GraphQLString
-//         },
-//         name:{
-//             type:GraphQLString
-//         },
-//         collegeName:{
-//             type:GraphQLString
-//         },
-//         major:{
-//             type:GraphQLString
-//         },
-//         contactNumber:{
-//             type:GraphQLString
-//         },
-//         dateOfBirth:{
-//             type:GraphQLString
-//         }
-//     })
-// })
-
-
 const RootMutationType = new GraphQLObjectType({
     name: 'Mutation',
     description: "Root Mutation",
@@ -669,6 +641,10 @@ const RootMutationType = new GraphQLObjectType({
                 student: {
                     type: StudentInputType
                 }
+            },
+            resolve:(parent,args)=>{
+                updateStatus(args.applicationId,args.student)
+
             }
         },
         studentLogin: {
@@ -680,7 +656,7 @@ const RootMutationType = new GraphQLObjectType({
                 }
             },
             resolve: (parent, args) => {
-                studentLogin(args.studentDetails)
+                return studentLogin(args.studentDetails)
             }
         },
         studentSignUp: {
@@ -692,7 +668,7 @@ const RootMutationType = new GraphQLObjectType({
                 }
             },
             resolve: (parent, args) => {
-                studentSignUp(args.studentDetails)
+                return studentSignUp(args.studentDetails)
             }
         },
         companyLogin: {
@@ -704,7 +680,7 @@ const RootMutationType = new GraphQLObjectType({
                 }
             },
             resolve: (parent, args) => {
-                studentLogin(args.employeeDetails)
+                return employeeLogin(args.employeeDetails)
             }
         },
         companySignUp: {
@@ -716,7 +692,7 @@ const RootMutationType = new GraphQLObjectType({
                 }
             },
             resolve: (parent, args) => {
-                studentSignUp(args.employeeDetails)
+                return employeeSignUp(args.employeeDetails)
             }
         },
 
