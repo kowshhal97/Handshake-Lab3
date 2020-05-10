@@ -468,7 +468,7 @@ const StudentInputType = new GraphQLInputObjectType({
 })
 
 const EmployerInput = new GraphQLInputObjectType({
-    name: "Employer input",
+    name: "EmployerInput",
     fields: () => ({
         name: {
             type: GraphQLString
@@ -502,10 +502,11 @@ const RootMutationType = new GraphQLObjectType({
             description: 'Update Student',
             args: {
                 student: {
-                    type: StudentInputType
+                    
+                    type:new GraphQLNonNull(StudentInputType)
                 },
                 id: {
-                    type: GraphQLString
+                    type:new GraphQLNonNull(GraphQLString)
                 }
             },
             resolve: (parent, args) => {
@@ -514,7 +515,15 @@ const RootMutationType = new GraphQLObjectType({
         },
         updateEmployer: {
             type: Employer,
-            description: "Update Company By Id",
+            description: "UpdateCompany",
+            args:{
+                employer:{
+                    type:new GraphQLNonNull(EmployerInput)
+                },
+                id:{
+                    type:new GraphQLNonNull(GraphQLString)
+                }
+            }
         }
     })
 })
