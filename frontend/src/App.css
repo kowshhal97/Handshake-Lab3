@@ -1,0 +1,12 @@
+.handShakeLayout {
+    width: 80%;
+    margin: auto;
+    background-color: white;
+    min-height: 100vh;
+}
+
+.handShakeMain {
+    background-color: #e6e6e6;
+    min-height: 100vh;
+}
+

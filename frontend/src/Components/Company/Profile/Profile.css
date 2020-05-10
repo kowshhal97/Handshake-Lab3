@@ -1,0 +1,21 @@
+.bigAvatar {
+    margin: 10;
+    width: 60;
+    height: 60,
+}
+
+.companyProfile {
+    width: 50%;
+
+}
+
+
+.paperHeight {
+    min-height: 20em;
+}
+
+.textStyle {
+    margin-top: 20;
+    margin-left: 10;
+    width: 400
+}

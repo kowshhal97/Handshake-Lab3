@@ -1,0 +1,9 @@
+.sideBarDiv {
+    background: #1569e0;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+    text-align: center;
+}

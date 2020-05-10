@@ -1,0 +1,9 @@
+.cardProfile {
+
+    min-height: fit-content;
+    margin: 1em auto;
+}
+
+.cardText {
+    padding-left: 1em;
+}

@@ -9,6 +9,13 @@ const multerS3 = require('multer-s3');
 const schema=require('./schema')
 
 
+
+const cors = require('cors');
+
+
+app.use(express.json({extended:false}));
+app.use(cors({origin:true,credentials:true}));
+
 app.use('/graphql',expressGraphQL({
     graphiql:true,
     schema:schema

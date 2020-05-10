@@ -274,9 +274,6 @@ const Job = new GraphQLObjectType({
 })
 
 
-
-
-
 const RootQueryType = new GraphQLObjectType({
     name: "Query",
     description: "Root Query",
