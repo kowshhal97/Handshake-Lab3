@@ -2,7 +2,9 @@ const initialState = {
 
     isLoggedIn: false,
     userType: 'none',
-    user: {}
+    user: {
+        
+    }
 };
 
 const reducer = (state = initialState, action) => {

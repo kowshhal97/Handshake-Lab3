@@ -9,13 +9,15 @@ import studentProfile from './Students/Profile/Profile';
 import Signup from './Signup/Signup';
 
 import companyDashBoard from './Company/DashBoard/DashBoard';
-
 import companyProfile from './Company/Profile/Profile';
 import companyStudentsTab from './Company/StudentsTab/StudentsTab';
+
+
 
 import CompanyProfile from './CompanyProfile'
 
 
+import {connect} from 'react-redux'
 
 
 import Home from './Home';
@@ -26,21 +28,14 @@ class Main extends Component {
 
 
     render() {
-        let NavBarVar, dashBoardVar, studentsTabVar, eventsVar, profileVar = null;
+        let NavBarVar, dashBoardVar, studentsTabVar, profileVar = null;
 
         if (!this.props.isLoggedIn) {
-            // NavBarVar = GlobalNavbar;
-            NavBarVar = StudentNavBar;
-            // dashBoardVar = Home;
-            // studentsTabVar = Home;
-            // profileVar = Home;
-
-            dashBoardVar = studentDashBoard;
-            profileVar = studentProfile;
-            studentsTabVar = companyStudentsTab;
-
+            NavBarVar = GlobalNavbar;
+            dashBoardVar = Home;
+            studentsTabVar = Home;
+            profileVar = Home;
         } else {
-
             NavBarVar = StudentNavBar;
             studentsTabVar = companyStudentsTab;
             if (this.props.userType === 'student') {
@@ -72,4 +67,18 @@ class Main extends Component {
     }
 }
 
-export default (Main);
+const mapDispatchToProps = dispatch => {
+    return ({
+        onLogout: () => dispatch({type: 'LOGOUT'}),
+        onLogin: (value) => dispatch({type: 'LOGIN', value: value})
+    });
+};
+
+const mapStateToProps = state => {
+    return {
+
+        isLoggedIn: state.isLoggedIn,
+        userType: state.userType
+    };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(Main);

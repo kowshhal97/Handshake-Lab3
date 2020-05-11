@@ -32,23 +32,23 @@ const useStyles = makeStyles(theme => ({
 
 const ButtonAppBar = (props) => {
     const classes = useStyles();
-    // const store = useSelector(store => store);
+    const store = useSelector(store => store);
 
-    // let redirectVar = null;
-    // let logout = () => {
-    //     props.onLogout();
-    // };
+    let redirectVar = null;
+    let logout = () => {
+        props.onLogout();
+    };
 
-    // if (store.isLoggedIn) {
-    //     redirectVar = <Redirect to="/"/>
-    // } else {
-    //     redirectVar = null;
-    // }
+    if (store.isLoggedIn) {
+        redirectVar = <Redirect to="/"/>
+    } else {
+        redirectVar = null;
+    }
 
     return (
         <div className={classes.root}>
 
-            {/* {redirectVar} */}
+            {redirectVar}
 
             <AppBar position="static">
                 <Toolbar>
@@ -90,7 +90,7 @@ const ButtonAppBar = (props) => {
                                 color="inherit">Students</Button></Link>
                             <Link to="/profile" style={{textDecoration: 'none', color: 'white'}}><Button
                                 color="inherit">profile</Button></Link>
-                            <Button  color="inherit">Logout</Button>
+                            <Button onClick={logout} color="inherit">Logout</Button>
                         </Grid>
                     </Grid>
                 </Toolbar>
