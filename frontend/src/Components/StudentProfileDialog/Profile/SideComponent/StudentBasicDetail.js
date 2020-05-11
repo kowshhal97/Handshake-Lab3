@@ -28,7 +28,7 @@ import Avatar from '@material-ui/core/Avatar';
 import Grid from '@material-ui/core/Grid';
 
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import {connect} from 'react-redux'
+
 
 const styles = theme => ({
     card: {
@@ -103,7 +103,6 @@ class RecipeReviewCard extends React.Component {
     };
 
     render() {
-        console.log(this.props.user);
         const {classes} = this.props;
 
         return (
@@ -327,9 +326,6 @@ RecipeReviewCard.propTypes = {
 };
 
 
-const mapStateToProps = state => {
-    return {};
-};
 
 
-export default connect(mapStateToProps)(withStyles(styles)(RecipeReviewCard));
+export default (withStyles(styles)(RecipeReviewCard));

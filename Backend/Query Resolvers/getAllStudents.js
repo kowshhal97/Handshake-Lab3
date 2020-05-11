@@ -6,6 +6,7 @@ const Student=require("./../models/student")
 getAllStudents=async()=>{
    
     try {
+      console.log("Get ALL Students")
       const users = await Student.find({})
       return users
   } catch (e) {

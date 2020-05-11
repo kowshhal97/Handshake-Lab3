@@ -9,7 +9,7 @@ import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import Typography from '@material-ui/core/Typography';
 import Profile from './Profile/Profile'
-import { connect } from 'react-redux'
+
 import axios from 'axios';
 
 import MailIcon from '@material-ui/icons/Mail';
@@ -69,38 +69,8 @@ class CustomizedDialogDemo extends React.Component {
     });
   };
 
-  sendMessage = (e) => {
-    let obj = {}
-    let messages = []
-    messages.push({
-      text: "Hi",
-      sender: this.props.user.name
-    })
-    let users = []
-    users.push({
-      name: this.props.user.name,
-      userId: this.props.user._id
-    })
-    users.push({
-      name: this.props.studentname,
-      userId: this.props.studentId,
-    })
+  
 
-    obj.messages = messages
-    obj.users = users
-
-    axios.post('http://localhost:3000/messages', obj)
-    .then(response => {
-    }).catch(() => {
-    window.alert("FAIL");
-})
-
-
-
-
-    console.log(obj)
-
-  }
   handleClose = (e) => {
     this.setState({ open: false });
     this.props.close(e);
@@ -132,12 +102,7 @@ class CustomizedDialogDemo extends React.Component {
             <Profile studentId={this.props.studentId} />
           </DialogContent>
           <DialogActions>
-            <Button onClick={this.sendMessage} color="primary"
-              startIcon={<MailIcon />}
-              variant="contained"
-              color="primary">
-              say Hi
-                        </Button>
+            
             <Button onClick={this.handleClose} color="primary">
               Close
                         </Button>
@@ -149,16 +114,5 @@ class CustomizedDialogDemo extends React.Component {
 }
 
 
-const mapDispatchToProps = dispatch => {
-  return ({
 
-  });
-};
-
-const mapStateToProps = state => {
-  return {
-    user: state.user
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(CustomizedDialogDemo);
+export default (CustomizedDialogDemo);

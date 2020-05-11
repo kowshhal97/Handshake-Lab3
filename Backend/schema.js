@@ -196,7 +196,7 @@ const Student = new GraphQLObjectType({
             type: GraphQLString
         },
         contactNumber: {
-            type: GraphQLInt
+            type: GraphQLString
         },
         dateOfBirth: {
             type: GraphQLString

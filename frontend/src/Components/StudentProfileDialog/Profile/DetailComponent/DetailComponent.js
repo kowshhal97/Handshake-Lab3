@@ -20,15 +20,13 @@ class DetailComponent extends Component {
     componentDidMount = () => {
         this._isMounted = true;
 
-        console.log(this.props.user);
 
-
-        axios.get('http://localhost:3000/student/studentProfile/' + this.props.studentId)
-            .then(response => {
-                this.setState(response.data)
-            }).catch(() => {
-            window.alert("FAIL")
-        })
+        // axios.get('http://localhost:3000/student/studentProfile/' + this.props.studentId)
+        //     .then(response => {
+        //         this.setState(response.data)
+        //     }).catch(() => {
+        //     window.alert("FAIL")
+        // })
     };
 
     componentWillUnmount() {
@@ -106,6 +104,7 @@ class DetailComponent extends Component {
         return (<div className="DetailCompMain">
 
 
+
                 <div style={{marginBottom: '20px'}}>
                     <div className='ui raised segment'>
                         <h4>Education</h4>
@@ -134,16 +133,8 @@ class DetailComponent extends Component {
     }
 }
 
-const mapDispatchToProps = dispatch => {
-    return ({
-        onSave: (user) => dispatch({type: "saveToProfile", user: user})
-    });
-};
 
-const mapStateToProps = state => {
-    return {
-        user: state.user
-    };
-};
 
-export default connect(mapStateToProps, mapDispatchToProps)(DetailComponent);
+
+
+export default (DetailComponent);

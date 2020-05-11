@@ -1,7 +1,10 @@
-import React, {Component} from 'react';
+import React, {PureComponent} from 'react';
 import MUIDataTable from "mui-datatables";
-import axios from 'axios';
+
 import ProfileDialog from './../../StudentProfileDialog/profileDialog'
+
+import {graphql} from 'react-apollo'
+import { gql } from 'apollo-boost';
 
 
 let Dialog = null;
@@ -31,7 +34,7 @@ const columns = [
         }
     },
     {
-        name: "country",
+        name: "state",
         label: "State",
         options: {
             filter: true,
@@ -49,10 +52,9 @@ const columns = [
 ];
 
 
-class StudentsTab extends Component {
+class StudentsTab extends PureComponent {
     _isMounted = false;
     state = {
-        data: [],
         showDialog: false
     };
 
@@ -66,8 +68,8 @@ class StudentsTab extends Component {
         selectableRowsOnClick: true,
         disableToolbarSelect: true,
         onCellClick: (colData, cellMeta) => {
-            console.log(this.state.data[cellMeta.dataIndex])
-            Dialog = (<ProfileDialog display={true} studentId={this.state.data[cellMeta.dataIndex]._id} studentname={this.state.data[cellMeta.dataIndex].name}
+            
+            Dialog = (<ProfileDialog display={true} studentId={this.props.data.students[cellMeta.dataIndex]._id} studentname={this.props.data.students[cellMeta.dataIndex].name}
                                      close={this.dialogCloseHandler}/>);
             this.setState({showDialog: true})
         },
@@ -77,15 +79,6 @@ class StudentsTab extends Component {
     };
 
     componentDidMount = () => {
-        var headers = new Headers();
-        axios.defaults.withCredentials = true;
-        axios.get('http://localhost:3000/student/studentProfile/')
-            .then(response => {
-                // let str=response.data.skillSet.join();
-                this.setState({data: [...response.data]})
-            }).catch(() => {
-            window.alert("FAIL")
-        })
     };
 
     componentWillUnmount() {
@@ -94,12 +87,11 @@ class StudentsTab extends Component {
 
 
     render() {
-
         if (!this.state.showDialog) {
             Dialog = null
         }
         let data = [];
-        data = this.state.data;
+        data = this.props.data.students;
         return (
             <div>
                 {Dialog}
@@ -117,4 +109,20 @@ class StudentsTab extends Component {
     }
 }
 
-export default StudentsTab;
+
+const query=gql`
+{
+    students {
+      _id
+      name
+      major
+      collegeName
+      city
+      state
+      country
+    }
+  }
+  `;
+
+
+export default graphql(query) (StudentsTab);

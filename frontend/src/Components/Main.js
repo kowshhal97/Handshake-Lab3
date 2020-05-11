@@ -29,10 +29,15 @@ class Main extends Component {
         let NavBarVar, dashBoardVar, studentsTabVar, eventsVar, profileVar = null;
 
         if (!this.props.isLoggedIn) {
-            NavBarVar = GlobalNavbar;
-            dashBoardVar = Home;
-            studentsTabVar = Home;
-            profileVar = Home;
+            // NavBarVar = GlobalNavbar;
+            NavBarVar = StudentNavBar;
+            // dashBoardVar = Home;
+            // studentsTabVar = Home;
+            // profileVar = Home;
+
+            dashBoardVar = studentDashBoard;
+            profileVar = studentProfile;
+            studentsTabVar = companyStudentsTab;
 
         } else {
 
