@@ -16,6 +16,7 @@ import { graphql } from 'react-apollo'
 import { gql } from 'apollo-boost';
 
 import Typography from '@material-ui/core/Typography';
+import { UniqueFieldDefinitionNamesRule } from 'graphql';
 
 function TabContainer(props) {
     return (
@@ -69,7 +70,16 @@ class SimpleTabs extends React.Component {
         };
    
         console.log(data)
-        let response=await this.props.studentLoginMutation(data);
+        let response=await this.props.studentLoginMutation({
+            variables: {
+                studentDetails:data
+            }
+        })
+
+         localStorage.setItem('id',response.data.studentLogin._id);
+         localStorage.setItem('userType',userType);
+         localStorage.setItem('isLoggedIn',true);
+         
         console.log(response)
     };
 
@@ -83,7 +93,6 @@ class SimpleTabs extends React.Component {
         axios.defaults.withCredentials = true;
         axios.post('http://localhost:3000/company/login', data)
             .then(response => {
-                // window.alert("Successs")
                 let user = response.data;
                 this.props.onLogin(userType, user);
             }).catch(() => {
