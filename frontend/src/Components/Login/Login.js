@@ -17,7 +17,6 @@ import { graphql } from 'react-apollo'
 import { gql } from 'apollo-boost';
 
 import Typography from '@material-ui/core/Typography';
-import { UniqueFieldDefinitionNamesRule } from 'graphql';
 
 import * as compose from 'lodash.flowright';
 

@@ -7,6 +7,11 @@ import Tab from '@material-ui/core/Tab';
 import './Signup.css';
 import axios from 'axios';
 
+import { connect } from 'react-redux'
+import * as compose from 'lodash.flowright';
+import { graphql } from 'react-apollo'
+import { gql } from 'apollo-boost';
+
 
 import PropTypes from 'prop-types';
 import {withStyles} from '@material-ui/core/styles';
@@ -72,7 +77,7 @@ class SimpleTabs extends React.Component {
         this.setState({major: e.target.value})
     };
 
-    signup = (e, userType) => {
+    signup = async (e, userType) => {
         var headers = new Headers();
         e.preventDefault();
         if (userType === 'student') {
@@ -91,14 +96,15 @@ class SimpleTabs extends React.Component {
             };
             axios.defaults.withCredentials = true;
             console.log(data);
-            axios.post('http://localhost:3000/student/signUp', data)
-                .then(response => {
-                    console.log(response.data);
-                    let user = response.data;
-                    this.props.onLogin(userType, user);
-                }).catch(() => {
-                window.alert("FAIL")
+            let response = await this.props.studentSignupMutation({
+                variables: {
+                    studentDetails: data
+                }
             })
+    let user = {...response.data.studentSignup }
+
+        this.props.onLogin(userType, user);
+
         } else {
             const data = {
                 email: this.state.emailId,
@@ -106,15 +112,16 @@ class SimpleTabs extends React.Component {
                 name: this.state.name,
                 location: this.state.collegeName
             };
-            axios.defaults.withCredentials = true;
-            axios.post('http://localhost:3000/company/signUp', data)
-                .then(response => {
-                    let user = response.data;
-                    this.props.onLogin(userType, user);
-                    console.log("Status Code : ", response.status);
-                }).catch(() => {
-                window.alert("FAIL")
+            let response = await this.props.companySignupMutation({
+                variables: {
+                    employerDetails: data
+                }
             })
+    
+            let user = {...response.data.companySignup }
+    
+            this.props.onLogin(userType, user);
+    
         }
     };
 
@@ -154,5 +161,89 @@ SimpleTabs.propTypes = {
 };
 
 
+const studentSignupMutation = gql`
+mutation login($studentDetails:studentInput){
+    studentLogin(studentDetails:$studentDetails)
+    {
+        _id
+        name
+        email
+        password
+        major
+        collegeName
+        contactNumber
+        dateOfBirth
+        city
+        state
+        country
+        careerObjective
+        skillSet
+        education {
+          id
+          institution_name
+          location
+          degree
+          major
+          passing_year
+          cgpa
+        }
+        experience {
+          id
+          company_name
+          designation
+          company_location
+          work_summary
+          starting_date
+          ending_date
+        }
+        applications{
+          _id
+          applicationId
+          status
+          companyName
+          job_title
+          job_location
+          job_salary
+          job_description
+          job_category
+          job_posting_date
+          job_application_deadline
+          job_requirements
+          application_date
+        }
+    }
+  }
+`;
 
-export default (withStyles(styles)(SimpleTabs));
+const companySignupMutation = gql`
+mutation login($employerDetails:EmployerInput){
+    companyLogin(employeeDetails:$employerDetails)
+    {
+      name
+      location
+      description
+      contactNumber
+    }
+  }
+`;
+
+const mapDispatchToProps = dispatch => {
+    return ({
+        onLogout: () => dispatch({ type: 'LOGOUT' }),
+        onLogin: (value, user) => dispatch({ type: 'LOGIN', value: value, user: user })
+    });
+};
+
+const mapStateToProps = state => {
+    return {
+        isLoggedIn: state.isLoggedIn,
+        userType: state.userType,
+        user: state.user
+    };
+};
+
+
+export default compose(
+    graphql(studentSignupMutation, { name: "studentSignupMutation" }),
+    graphql(companySignupMutation, { name: "companySignupMutation" }),
+    connect(mapStateToProps, mapDispatchToProps))(withStyles(styles)(SimpleTabs));
