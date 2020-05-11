@@ -12,6 +12,9 @@ import PropTypes from 'prop-types';
 import {withStyles} from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 
+import { graphql } from 'react-apollo'
+import { gql } from 'apollo-boost';
+
 import Typography from '@material-ui/core/Typography';
 
 function TabContainer(props) {
@@ -55,7 +58,7 @@ class SimpleTabs extends React.Component {
     };
 
 
-    studentLogin = (e, userType) => {
+    studentLogin = async (e, userType) => {
         const header = {
             'Content-Type': 'application/json',
         };
@@ -64,15 +67,10 @@ class SimpleTabs extends React.Component {
             email: this.state.emailId,
             password: this.state.password
         };
-        console.log(data);
-        axios.defaults.withCredentials = true;
-        axios.post('http://localhost:3000/student/login', data, header)
-            .then(response => {
-                let user = response.data;
-                this.props.onLogin(userType, user);
-            }).catch(() => {
-            window.alert("FAIL")
-        })
+   
+        console.log(data)
+        let response=await this.props.studentLoginMutation(data);
+        console.log(response)
     };
 
     companyLogin = (e, userType) => {
@@ -92,7 +90,6 @@ class SimpleTabs extends React.Component {
             window.alert("FAIL");
         })
     };
-
 
     render() {
         const {classes} = this.props;
@@ -132,5 +129,14 @@ SimpleTabs.propTypes = {
 };
 
 
+const studentLoginMutation = gql`
+mutation login($studentDetails:studentInput){
+    studentLogin(studentDetails:$studentDetails)
+    {
+      _id
+    }
+  }
+`;
 
-export default (withStyles(styles)(SimpleTabs));
+
+export default graphql(studentLoginMutation,{name:"studentLoginMutation"})(withStyles(styles)(SimpleTabs));
