@@ -18,6 +18,8 @@ import { gql } from 'apollo-boost';
 import Typography from '@material-ui/core/Typography';
 import { UniqueFieldDefinitionNamesRule } from 'graphql';
 
+import * as compose from 'lodash.flowright';
+
 function TabContainer(props) {
     return (
         <Typography component="div" style={{padding: 8 * 3}}>
@@ -60,9 +62,7 @@ class SimpleTabs extends React.Component {
 
 
     studentLogin = async (e, userType) => {
-        const header = {
-            'Content-Type': 'application/json',
-        };
+      
         e.preventDefault();
         const data = {
             email: this.state.emailId,
@@ -79,25 +79,30 @@ class SimpleTabs extends React.Component {
          localStorage.setItem('id',response.data.studentLogin._id);
          localStorage.setItem('userType',userType);
          localStorage.setItem('isLoggedIn',true);
-         
+
         console.log(response)
     };
 
-    companyLogin = (e, userType) => {
+    companyLogin = async(e, userType) => {
         var headers = new Headers();
         e.preventDefault();
         const data = {
             email: this.state.emailId,
             password: this.state.password,
         };
-        axios.defaults.withCredentials = true;
-        axios.post('http://localhost:3000/company/login', data)
-            .then(response => {
-                let user = response.data;
-                this.props.onLogin(userType, user);
-            }).catch(() => {
-            window.alert("FAIL");
+
+        let response=await this.props.companyLoginMutation({
+            variables: {
+                employerDetails:data
+            }
         })
+
+        localStorage.setItem('id',response.data.companyLogin.name);
+         localStorage.setItem('userType',userType);
+         localStorage.setItem('isLoggedIn',true);
+
+        console.log(response)
+        
     };
 
     render() {
@@ -147,5 +152,17 @@ mutation login($studentDetails:studentInput){
   }
 `;
 
+const companyLoginMutation = gql`
+mutation login($employerDetails:EmployerInput){
+    companyLogin(employeeDetails:$employerDetails)
+    {
+      name
+    }
+  }
+`;
 
-export default graphql(studentLoginMutation,{name:"studentLoginMutation"})(withStyles(styles)(SimpleTabs));
+
+export default compose(
+    graphql(studentLoginMutation,{name:"studentLoginMutation"}),
+    graphql(companyLoginMutation,{name:"companyLoginMutation"})
+    )(withStyles(styles)(SimpleTabs));
