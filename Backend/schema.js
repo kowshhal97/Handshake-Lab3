@@ -213,6 +213,9 @@ const Student = new GraphQLObjectType({
         careerObjective: {
             type: GraphQLString
         },
+        skillSet:{
+            type:  new GraphQLList(GraphQLString)
+        },
         education: {
             type: new GraphQLList(Education),
             description: "Education details of a Student"

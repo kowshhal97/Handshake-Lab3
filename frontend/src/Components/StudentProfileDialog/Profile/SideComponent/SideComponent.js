@@ -56,19 +56,18 @@ class SideComponent extends Component {
 
     render() {
 
-        console.log(this.props.data.student)
 
         return (<div className="sideProfile">
-            {this.state._id === undefined ? null :
+            {this.props.data.student === undefined ? null :
                 (<div>
-                    <div style={{ marginBottom: 20 }}><Basic user={this.state}
+                    <div style={{ marginBottom: 20 }}><Basic user={this.props.data.student}
                         changeCity={this.changCity} changeSta={this.changeSta}
                         changeCon={this.changeCon} changePh={this.changePh}
                         changeDob={this.changeDob} changeObj={this.changeObj}
                         save={this.save}
                     /></div>
                     <Grid container direction="row" justify="center">
-                        <Skill studentId={this.props.studentId} skillSet={this.state.skillSet.skillSet} />
+                        <Skill studentId={this.props.studentId} skillSet={this.props.data.student.skillSet} />
                     </Grid>
                 </div>)
             }
