@@ -86,12 +86,8 @@ const ButtonAppBar = (props) => {
                         <Grid container direction="row" justify="space-between" alignItems="center">
                             <Link to="/dashboard" style={{textDecoration: 'none', color: 'white'}}><Button
                                 color="inherit">Jobs</Button></Link>
-                            <Link to="/events" style={{textDecoration: 'none', color: 'white'}}><Button
-                                color="inherit">Events</Button></Link>
                             <Link to="/studentsTab" style={{textDecoration: 'none', color: 'white'}}><Button
                                 color="inherit">Students</Button></Link>
-                            <Link to="/messages" style={{textDecoration: 'none', color: 'white'}}><Button
-                                color="inherit">messages</Button></Link>
                             <Link to="/profile" style={{textDecoration: 'none', color: 'white'}}><Button
                                 color="inherit">profile</Button></Link>
                             <Button  color="inherit">Logout</Button>

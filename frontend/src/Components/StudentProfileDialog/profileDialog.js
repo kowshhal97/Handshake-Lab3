@@ -69,7 +69,7 @@ class CustomizedDialogDemo extends React.Component {
     });
   };
 
-  
+
 
   handleClose = (e) => {
     this.setState({ open: false });
@@ -93,8 +93,7 @@ class CustomizedDialogDemo extends React.Component {
           aria-labelledby="customized-dialog-title"
           open={this.state.open}
           fullWidth={true}
-          maxWidth={"md"}
-        >
+          maxWidth={"md"}>
           <DialogTitle id="customized-dialog-title" onClose={this.handleClose}>
             Profile
                     </DialogTitle>
@@ -102,7 +101,7 @@ class CustomizedDialogDemo extends React.Component {
             <Profile studentId={this.props.studentId} />
           </DialogContent>
           <DialogActions>
-            
+
             <Button onClick={this.handleClose} color="primary">
               Close
                         </Button>
@@ -112,7 +111,5 @@ class CustomizedDialogDemo extends React.Component {
     );
   }
 }
-
-
 
 export default (CustomizedDialogDemo);

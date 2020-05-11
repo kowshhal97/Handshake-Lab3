@@ -71,7 +71,6 @@ class Skills extends React.Component {
         return (
             <Label as='a' style={{marginBottom: '5px'}}>
                 {skill}
-                <Icon name='delete' id={skill} onClick={this.onDeleteSkill}/>
             </Label>
         )
     };

@@ -5,6 +5,9 @@ import './DetailComponent.css'
 import Education from './Education'
 import Experience from './Experience';
 
+import { graphql } from 'react-apollo'
+import { gql } from 'apollo-boost';
+
 
 class DetailComponent extends Component {
     _isMounted = false;
@@ -19,14 +22,6 @@ class DetailComponent extends Component {
 
     componentDidMount = () => {
         this._isMounted = true;
-
-
-        // axios.get('http://localhost:3000/student/studentProfile/' + this.props.studentId)
-        //     .then(response => {
-        //         this.setState(response.data)
-        //     }).catch(() => {
-        //     window.alert("FAIL")
-        // })
     };
 
     componentWillUnmount() {
@@ -100,16 +95,17 @@ class DetailComponent extends Component {
     };
 
     render() {
+        console.log(this.props.data.student)
 
+        
         return (<div className="DetailCompMain">
-
-
-
-                <div style={{marginBottom: '20px'}}>
+            {this.props.data.student?
+            <div>
+            <div style={{marginBottom: '20px'}}>
                     <div className='ui raised segment'>
                         <h4>Education</h4>
                         <div className='ui items'>
-                            {this.state.education.map(education => {
+                            {this.props.data.student.education.map(education => {
                                 return <Education key={education} onUpdateEducation={this.onUpdateEducation}
                                                   education={education}/>;
                             })}
@@ -121,13 +117,15 @@ class DetailComponent extends Component {
                     <div className='ui segment'>
                         <b>Work Experience</b>
                         <div className='ui items'>
-                            {this.state.experience.map(experience => {
+                            {this.props.data.student.experience.map(experience => {
                                 return <Experience key={experience} onUpdateExperience={this.onUpdateExperience}
                                                    experience={experience} studentId={this.props.studentId}/>;
                             })}
                         </div>
                     </div>
                 </div>
+                </div>:null}
+                
             </div>
         );
     }
@@ -135,6 +133,31 @@ class DetailComponent extends Component {
 
 
 
+const query = gql`
+query GetStudentById($studentId:String!)
+{
+    student(id: $studentId) {
+      _id
+      education {
+        id
+        institution_name
+        location
+        degree
+        major
+        passing_year
+        cgpa
+      }
+      experience {
+        id
+        company_name
+        designation
+        company_location
+        work_summary
+        starting_date
+        ending_date
+      }
+    }
+}
+`;
 
-
-export default (DetailComponent);
+export default graphql(query)(DetailComponent);

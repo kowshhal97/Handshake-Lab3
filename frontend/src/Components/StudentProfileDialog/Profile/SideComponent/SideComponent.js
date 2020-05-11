@@ -90,6 +90,7 @@ query GetStudentById($studentId:String!)
       city
       state
       country
+      skillSet
       careerObjective
     }
 }
