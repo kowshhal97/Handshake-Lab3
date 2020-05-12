@@ -98,6 +98,7 @@ class SimpleTabs extends React.Component {
 
         let user = {...response.data.companyLogin }
 
+        sessionStorage.setItem('name',user.name)
         this.props.onLogin(userType, user);
 
         console.log(response)

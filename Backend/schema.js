@@ -428,9 +428,6 @@ const educationInputType = new GraphQLInputObjectType({
         institution_name: {
             type: GraphQLString
         },
-        location: {
-            type: GraphQLString
-        },
         degree: {
             type: GraphQLString
         },

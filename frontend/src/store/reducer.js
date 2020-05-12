@@ -4,7 +4,8 @@ const initialState = {
     userType: 'none',
     user: {
         
-    }
+    },
+    name:""
 };
 
 const reducer = (state = initialState, action) => {
@@ -18,6 +19,7 @@ const reducer = (state = initialState, action) => {
     if (action.type === 'LOGIN') {
         return {
             ...state,
+            name:action.user.name,
             isLoggedIn: true,
             userType: action.value,
             user: action.user

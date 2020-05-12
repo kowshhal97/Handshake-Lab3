@@ -9,9 +9,10 @@ import LocationCityIcon from '@material-ui/icons/LocationCity';
 import SaveIcon from '@material-ui/icons/Save';
 import axios from 'axios';
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
+
 import './Profile.css';
 
+import { connect } from 'react-redux';
 import { graphql } from 'react-apollo'
 import { gql } from 'apollo-boost';
 import * as compose from 'lodash.flowright';

@@ -1,8 +1,12 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import MUIDataTable from "mui-datatables";
 import JobsDialog from './JobsDialog/JobsDialog'
 import axios from 'axios';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
+
+import { graphql } from 'react-apollo'
+import { gql } from 'apollo-boost';
+import * as compose from 'lodash.flowright';
 
 
 let Dialog = null;
@@ -66,21 +70,19 @@ class PostedJobs extends Component {
 
 
     componentDidMount = () => {
-        var headers = new Headers();
-        axios.defaults.withCredentials = true;
-        axios.get('http://localhost:3000/jobs/company/' + this.props.user.name)
-            .then(response => {
-                this.setState({data: response.data});
-            }).catch(() => {
-            window.alert("FAIL")
-        })
+        // this.props.getJobsByCompanyName.refetch(
+        //     {
+        //         variables: {
+        //             name: "Ralph Lauren"
+        //         }
+        //     })
     };
 
 
     dialogCloseHandler = (e) => {
 
         e.preventDefault();
-        this.setState({showDialog: false})
+        this.setState({ showDialog: false })
     };
 
 
@@ -88,10 +90,10 @@ class PostedJobs extends Component {
         selectableRowsOnClick: true,
         disableToolbarSelect: true,
         onCellClick: (colData, cellMeta) => {
-            Dialog = (<JobsDialog display={true} 
-                studentsApplied={this.state.data[cellMeta.dataIndex].students}
-                                  close={this.dialogCloseHandler}/>);
-            this.setState({showDialog: true})
+            Dialog = (<JobsDialog display={true}
+                studentsApplied={this.props.data.getJobsByCompanyName[cellMeta.dataIndex].students}
+                close={this.dialogCloseHandler} />);
+            this.setState({ showDialog: true })
         },
         selectableRows: "none",
         download: false,
@@ -101,19 +103,20 @@ class PostedJobs extends Component {
 
     render() {
 
-
+        console.log()
         if (!this.state.showDialog) {
             Dialog = null
         }
         return (
             <div>
                 {Dialog}
+                {this.props.data.getJobsByCompanyName?
                 <MUIDataTable
                     title={"Posted Job"}
-                    data={this.state.data}
+                    data={this.props.data.getJobsByCompanyName}
                     columns={column}
                     options={this.options}
-                />
+                />:null}
             </div>)
     }
 }
@@ -129,5 +132,32 @@ const mapStateToProps = state => {
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(PostedJobs);
+const getJobsByCompanyName = gql`
+query getJobsByCompanyName($name:String!){
+    getJobsByCompanyName(name:$name)
+    {
+        _id
+        job_title
+        companyName
+        job_location
+        job_category
+        job_posting_date
+        job_application_deadline
+        job_salary
+      students{
+          _id
+        name
+        major
+        collegeName
+      }
+    }
+  }
+`;
+
+
+export default compose(graphql(getJobsByCompanyName, {
+    options: (props) => ({
+         variables: { name: sessionStorage.getItem('name')}
+    })
+}),connect(mapStateToProps, mapDispatchToProps))(PostedJobs);
 

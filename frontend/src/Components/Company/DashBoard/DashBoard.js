@@ -13,6 +13,11 @@ import PostJobs from './PostJobs/PostJobs';
 import PostedJobs from './View Posted Jobs/PostedJobs';
 
 
+import { graphql } from 'react-apollo'
+import { gql } from 'apollo-boost';
+import * as compose from 'lodash.flowright';
+
+
 function TabContainer(props) {
     return (
         <Typography component="div" style={{padding: 8 * 3}}>
@@ -151,6 +156,7 @@ const mapStateToProps = state => {
         user: state.user
     };
 };
+
 
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(DashBoard));
