@@ -6,7 +6,7 @@ postJob=async(jobPost)=>{
     const post = new JobPost(jobPost)
     try {
         await post.save()
-      return user
+      return post
     } catch (e) {
       console.log(e)
     }

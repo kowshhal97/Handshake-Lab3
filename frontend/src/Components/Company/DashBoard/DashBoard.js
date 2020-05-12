@@ -78,7 +78,7 @@ class DashBoard extends React.Component {
         this.setState({job_category: e.target.value})
     };
 
-    postJob = (e) => {
+    postJob = async (e) => {
         var headers = new Headers();
         e.preventDefault();
         const data = {
@@ -91,13 +91,12 @@ class DashBoard extends React.Component {
             job_requirements: this.state.job_requirements,
             job_category: this.state.job_category
         };
-        axios.defaults.withCredentials = true;
-        axios.post('http://localhost:3000/jobs/' + this.props.user.name, data)
-            .then(response => {
-
-            }).catch(() => {
-            window.alert("FAIL")
+        let response = await this.props.postJobMutation({
+            variables: {
+                jobPost: data
+            }
         })
+        console.log(response.data)
     };
 
 
@@ -158,5 +157,15 @@ const mapStateToProps = state => {
 };
 
 
+const postJobMutation = gql`
+mutation postJobMutation($jobPost:PostJob!){
+    Postjob(jobPost:$jobPost)
+    {
+    }
+  }
+`;
 
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(DashBoard));
+
+export default compose(
+    graphql(postJobMutation, { name: "postJobMutation" }),
+    connect(mapStateToProps, mapDispatchToProps))(withStyles(styles)(DashBoard));
