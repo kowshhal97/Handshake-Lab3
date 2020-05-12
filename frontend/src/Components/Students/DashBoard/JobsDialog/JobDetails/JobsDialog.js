@@ -11,10 +11,12 @@ import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import Typography from '@material-ui/core/Typography';
 import FavoriteIcon from '@material-ui/icons/Favorite';
-import axios from 'axios';
-import {connect} from 'react-redux';
+
 import JobDetails from './JobDetails'
 import {Redirect} from 'react-router';
+
+import { graphql } from 'react-apollo'
+import { gql } from 'apollo-boost';
 
 import ApplyDialogue from './../ApplyDialogue/ApplyDialogue'
 
@@ -86,22 +88,14 @@ class CustomizedDialogDemo extends React.Component {
     };
 
     componentDidMount = () => {
-        var headers = new Headers();
-        axios.defaults.withCredentials = true;
-        axios.get('http://localhost:3000/jobs/' + this.props.jobId)
-            .then(response => {
-                this.setState({data: response.data});
-                console.log(this.state.data)
-            }).catch(() => {
-            window.alert("FAIL")
-        })
+       
     };
 
     viewCompany = (e) => {
         e.preventDefault();
         this.redirectVar = (<Redirect to={{
             pathname: '/company/profile',
-            companyName: this.state.data.companyName
+            companyName: this.props.data.job.companyName
         }}
 
         />);
@@ -129,11 +123,13 @@ class CustomizedDialogDemo extends React.Component {
         if (!this.state.showDialog) {
             Diaalog = null
         }
+        console.log(this.props)
         return (
+ 
             <div>
                 {Diaalog}
                 {this.redirectVar}
-                {this.state.data === null ? null :
+                {this.props.data.job ?
                     <Dialog
                         onClose={this.handleClose}
                         aria-labelledby="customized-dialog-title"
@@ -145,14 +141,14 @@ class CustomizedDialogDemo extends React.Component {
                             Job Details
                         </DialogTitle>
                         <DialogContent>
-                            <JobDetails jobTitle={this.state.data.job_title}
-                                        jobDescription={this.state.data.job_description}
-                                        jobRequirements={this.state.data.job_requirements}
-                                        postingDate={this.state.data.job_posting_date}
-                                        deadline={this.state.data.job_application_deadline}
-                                        location={this.state.data.job_location}
-                                        salary={this.state.data.job_salary}
-                                        category={this.state.data.job_category}
+                            <JobDetails jobTitle={this.props.data.job.job_title}
+                                        jobDescription={this.props.data.job.job_description}
+                                        jobRequirements={this.props.data.job.job_requirements}
+                                        postingDate={this.props.data.job.job_posting_date}
+                                        deadline={this.props.data.job.job_application_deadline}
+                                        location={this.props.data.job.job_location}
+                                        salary={this.props.data.job.job_salary}
+                                        category={this.props.data.job.job_category}
                             />
                         </DialogContent>
                         <DialogActions>
@@ -172,20 +168,27 @@ class CustomizedDialogDemo extends React.Component {
                                 Close
                             </Button>
                         </DialogActions>
-                    </Dialog>}
+                    </Dialog>:null}
             </div>
         );
     }
 }
 
-const mapDispatchToProps = dispatch => {
-    return ({});
-};
+const query = gql`
+query getJobById($jobId:String!)
+{
+    job(id: $jobId) {
+      _id
+      job_title
+      job_description
+      job_requirements
+      job_posting_date
+      job_application_deadline
+      job_location
+      job_salary
+      job_category
+    }
+}
+`;
 
-const mapStateToProps = state => {
-    return {
-        user: state.user
-    };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(CustomizedDialogDemo);
+export default graphql(query)(CustomizedDialogDemo);

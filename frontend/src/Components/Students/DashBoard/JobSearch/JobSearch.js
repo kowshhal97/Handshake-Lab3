@@ -4,6 +4,9 @@ import {connect} from 'react-redux'
 import MUIDataTable from "mui-datatables";
 import JobsDialog from '../JobsDialog/JobDetails/JobsDialog'
 
+import {graphql} from 'react-apollo'
+import { gql } from 'apollo-boost';
+
 
 let Dialog = null;
 const column = [
@@ -66,7 +69,7 @@ class DashBoard extends Component {
         selectableRowsOnClick: true,
         disableToolbarSelect: true,
         onCellClick: (colData, cellMeta) => {
-            Dialog = (<JobsDialog display={true} jobId={this.state.data[cellMeta.dataIndex]._id}
+            Dialog = (<JobsDialog display={true} jobId={this.props.data.jobs[cellMeta.dataIndex]._id}
                                   close={this.dialogCloseHandler}/>);
             this.setState({showDialog: true})
         },
@@ -76,16 +79,6 @@ class DashBoard extends Component {
     };
 
     componentDidMount = () => {
-        var headers = new Headers();
-        axios.defaults.withCredentials = true;
-        axios.get('http://localhost:3000/jobs')
-            .then(response => {
-
-                this.setState({data: [...response.data]});
-
-            }).catch(() => {
-            window.alert("FAIL")
-        })
     };
 
     render() {
@@ -93,36 +86,35 @@ class DashBoard extends Component {
         if (!this.state.showDialog) {
             Dialog = null
         }
+        console.log(this.props)
         return (
             <div>
                 {Dialog}
-                <MUIDataTable
+                {this.props.data.jobs?<MUIDataTable
                     title={"All Jobs"}
-                    data={this.state.data}
+                    data={this.props.data.jobs}
                     columns={column}
                     options={this.options}
-                />
+                />:null}
+                
             </div>
         )
     }
 }
 
 
-const mapDispatchToProps = dispatch => {
-    return ({
-        onLogout: () => dispatch({type: 'LOGOUT'}),
-        onLogin: (value) => dispatch({type: 'LOGIN', value: value})
-    });
-};
 
-const mapStateToProps = state => {
-    return {
+const query=gql`
+{
+    jobs{
+        _id
+      job_title
+      job_location
+      job_salary
+      job_category
+      companyName
+    }
+  }
+  `;
 
-
-        isLoggedIn: state.isLoggedIn,
-        userType: state.userType,
-        studentId: state.studentId
-    };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(DashBoard);
+export default graphql(query) (DashBoard);

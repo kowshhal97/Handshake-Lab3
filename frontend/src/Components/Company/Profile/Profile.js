@@ -1,16 +1,20 @@
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
-import {withStyles} from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import DescriptionIcon from '@material-ui/icons/Description';
 import EditIcon from '@material-ui/icons/Edit';
 import LocationCityIcon from '@material-ui/icons/LocationCity';
 import SaveIcon from '@material-ui/icons/Save';
 import axios from 'axios';
-import React, {Component} from 'react';
-import {connect} from 'react-redux';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import './Profile.css';
+
+import { graphql } from 'react-apollo'
+import { gql } from 'apollo-boost';
+import * as compose from 'lodash.flowright';
 
 
 const styles = {
@@ -68,55 +72,61 @@ class Profile extends Component {
         this.setState(this.props.user)
     };
     editDesc = (e) => {
-        this.setState({editDes: true})
+        this.setState({ editDes: true })
     };
     editDescCancel = () => {
-        this.setState({editDes: false})
+        this.setState({ editDes: false })
     };
     changeDesc = (e) => {
-        this.setState({description: e.target.value})
+        this.setState({ description: e.target.value })
     };
     editLoc = (e) => {
-        this.setState({editLoc: true})
+        this.setState({ editLoc: true })
     };
     editLocCancel = () => {
-        this.setState({editLoc: false})
+        this.setState({ editLoc: false })
     };
     changeLoc = (e) => {
 
-        this.setState({location: e.target.value})
+        this.setState({ location: e.target.value })
     };
     editContact = (e) => {
-        this.setState({editContact: true})
+        this.setState({ editContact: true })
     };
     editContactCancel = () => {
-        this.setState({editContact: false})
+        this.setState({ editContact: false })
     };
     changeContact = (e) => {
 
-        this.setState({contactNumber: e.target.value})
+        this.setState({ contactNumber: e.target.value })
     };
-    save = () => {
+    save = async () => {
         const data = {
             name: this.state.name,
             location: this.state.location,
             description: this.state.description,
             contactNumber: this.state.contactNumber
         };
-        axios.defaults.withCredentials = true;
-        axios.put('http://localhost:3000/company/companyProfile/' + this.props.user.name, data)
-            .then(response => {
-                this.props.onSave(response.data)
-            }).catch(() => {
-            window.alert("FAIL")
-        });
+
+        console.log(this.props)
+        let response = await this.props.updateEmployer({
+            variables: {
+                employerDetails: data,
+                id: this.state.name
+            }
+        })
+
+        console.log(response)
+
+        this.props.onSave(response.data.updateEmployer)
+
         this.editDescCancel();
         this.editContactCancel();
         this.editLocCancel();
     };
 
     render() {
-        const {classes} = this.props;
+        const { classes } = this.props;
         let desc = null;
         let loc = null;
         let contactInfo = null;
@@ -125,15 +135,15 @@ class Profile extends Component {
                 <Grid container>
                     <Grid xs={6}>
                         <TextField className={classes.textStyle} id="outlined-basic" label="Description"
-                                   variant="outlined" defaultValue={this.state.description}
-                                   helperText="Edit Description Here" onChange={this.changeDesc}/>
+                            variant="outlined" defaultValue={this.state.description}
+                            helperText="Edit Description Here" onChange={this.changeDesc} />
                     </Grid>
                     <Grid container xs={6} justify="flex-end" direction="row" alignItems="center">
                         <Button
                             variant="contained"
                             color="primary"
                             size="large"
-                            startIcon={<SaveIcon/>}
+                            startIcon={<SaveIcon />}
                             onClick={this.save}
                             className={classes.buttonCss}
                         >
@@ -150,17 +160,17 @@ class Profile extends Component {
                 className={classes.companyPaperInternal}>
                 <Grid container>
                     <Grid container xs
-                          alignItems="center">
+                        alignItems="center">
                         <Grid>
                             <h3>Description</h3>
                         </Grid>
                         <Grid>
-                            <DescriptionIcon/>
+                            <DescriptionIcon />
                         </Grid>
                     </Grid>
                     <Grid container xs justify="flex-end" direction="row" alignItems="flex-start">
-                        <Button variant="contained" color="default" color="primary" startIcon={<EditIcon/>}
-                                onClick={this.editDesc}>
+                        <Button variant="contained" color="default" color="primary" startIcon={<EditIcon />}
+                            onClick={this.editDesc}>
                             Edit
                         </Button>
                     </Grid>
@@ -177,15 +187,15 @@ class Profile extends Component {
                 <Grid container>
                     <Grid xs={6}>
                         <TextField className={classes.textStyle} id="outlined-basic" label="Description"
-                                   variant="outlined" defaultValue={this.state.contactNumber}
-                                   helperText="Edit Contact Information Here" onChange={this.changeContact}/>
+                            variant="outlined" defaultValue={this.state.contactNumber}
+                            helperText="Edit Contact Information Here" onChange={this.changeContact} />
                     </Grid>
                     <Grid container xs={6} justify="flex-end" direction="row" alignItems="center">
                         <Button
                             variant="contained"
                             color="primary"
                             size="large"
-                            startIcon={<SaveIcon/>}
+                            startIcon={<SaveIcon />}
                             onClick={this.save}
                             className={classes.buttonCss}
                         >
@@ -202,17 +212,17 @@ class Profile extends Component {
                 className={classes.companyPaperInternal}>
                 <Grid container>
                     <Grid container xs
-                          alignItems="center">
+                        alignItems="center">
                         <Grid>
                             <h3>Contact Information</h3>
                         </Grid>
                         <Grid>
-                            <DescriptionIcon/>
+                            <DescriptionIcon />
                         </Grid>
                     </Grid>
                     <Grid container xs justify="flex-end" direction="row" alignItems="flex-start">
-                        <Button variant="contained" color="default" color="primary" startIcon={<EditIcon/>}
-                                onClick={this.editContact}>
+                        <Button variant="contained" color="default" color="primary" startIcon={<EditIcon />}
+                            onClick={this.editContact}>
                             Edit
                         </Button>
                     </Grid>
@@ -229,15 +239,15 @@ class Profile extends Component {
                 <Grid container>
                     <Grid xs={6}>
                         <TextField className={classes.textStyle} id="outlined-basic" label="Description"
-                                   variant="outlined" defaultValue={this.state.location} helperText="Edit Location Here"
-                                   onChange={this.changeLoc}/>
+                            variant="outlined" defaultValue={this.state.location} helperText="Edit Location Here"
+                            onChange={this.changeLoc} />
                     </Grid>
                     <Grid container xs={6} justify="flex-end" direction="row" alignItems="center">
                         <Button
                             variant="contained"
                             color="primary"
                             size="large"
-                            startIcon={<SaveIcon/>}
+                            startIcon={<SaveIcon />}
                             onClick={this.save}
                             className={classes.buttonCss}>
                             Save
@@ -254,17 +264,17 @@ class Profile extends Component {
                 className={classes.companyPaperInternal}>
                 <Grid container>
                     <Grid container xs
-                          alignItems="center">
+                        alignItems="center">
                         <Grid>
                             <h3>Location</h3>
                         </Grid>
                         <Grid>
-                            <LocationCityIcon/>
+                            <LocationCityIcon />
                         </Grid>
                     </Grid>
                     <Grid container xs justify="flex-end" direction="row" alignItems="flex-start">
                         <Button onClick={this.editLoc} variant="contained" color="default" color="primary"
-                                startIcon={<EditIcon/>}>
+                            startIcon={<EditIcon />}>
                             Edit
                         </Button>
                     </Grid>
@@ -284,22 +294,22 @@ class Profile extends Component {
                             <Paper className={classes.profilePaper}>
 
                                 <Grid container direction="column" justify="flex-start" alignItems="center"
-                                      className={classes.profileCard}>
+                                    className={classes.profileCard}>
                                     <Grid container>
                                         <Grid container xs direction="row" alignItems="flex-end"
-                                              className="companyName">
+                                            className="companyName">
                                             <h2>{this.state.name}</h2>
                                         </Grid>
                                         <Grid container xs justify="flex-end" direction="row" alignItems="flex-start">
                                             <Button variant="contained" color="default" color="secondary"
-                                                    startIcon={<EditIcon/>}>
+                                                startIcon={<EditIcon />}>
                                                 Edit</Button>
                                         </Grid>
                                     </Grid>
                                     <Grid container direction="row" justify="center" alignItems="stretch">
                                         <img
                                             src="https://pbs.twimg.com/profile_images/1216813945408966663/vkVajfRz_400x400.jpg"
-                                            className={classes.bigAvatar}/>
+                                            className={classes.bigAvatar} />
                                     </Grid>
                                 </Grid>
                             </Paper>
@@ -334,7 +344,7 @@ class Profile extends Component {
 
 const mapDispatchToProps = dispatch => {
     return ({
-        onSave: (user) => dispatch({type: "saveToProfile", user: user})
+        onSave: (user) => dispatch({ type: "saveToProfile", user: user })
     });
 };
 
@@ -344,4 +354,23 @@ const mapStateToProps = state => {
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Profile));
+
+const updateEmployer = gql`
+mutation updateEmployer($employerDetails:EmployerInput!,$id:String!){
+    updateEmployer(employer:$employerDetails,id:$id)
+    {
+        _id
+        name
+      location
+      description
+      contactNumber
+    }
+  }
+`;
+
+
+
+
+
+export default compose(graphql(updateEmployer, { name: "updateEmployer" }),
+    connect(mapStateToProps, mapDispatchToProps))(withStyles(styles)(Profile));
