@@ -641,12 +641,15 @@ const RootMutationType = new GraphQLObjectType({
                 applicationId: {
                     type: GraphQLString
                 },
-                student: {
-                    type: StudentInputType
+                studentId: {
+                    type: GraphQLString
+                },
+                status:{
+                    type:GraphQLString
                 }
             },
             resolve:(parent,args)=>{
-                updateStatus(args.applicationId,args.student)
+                updateStatus(args.applicationId,args.studentId,args.status)
 
             }
         },

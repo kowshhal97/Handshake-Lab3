@@ -161,6 +161,7 @@ const postJobMutation = gql`
 mutation postJobMutation($jobPost:PostJob!){
     Postjob(jobPost:$jobPost)
     {
+      _id
     }
   }
 `;
