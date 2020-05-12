@@ -89,16 +89,11 @@ class CustomizedDialogDemo extends React.Component {
         let year = newDate.getFullYear();
 
         let currentDate = `${year}-${month < 10 ? `0${month}` : `${month}`}-${date}`;
-        const data = {
-            student: this.props.user,
-            application_date: currentDate
-        };
-        console.log(data);
-        axios.defaults.withCredentials = true;
+        
 
+        console.log(this.props.user)
         let response = await this.props.applyToJob({
             variables: {
-                
                 student: this.props.user,
                 jobId:this.props.jobId,
                 application_date:currentDate
@@ -181,7 +176,6 @@ class CustomizedDialogDemo extends React.Component {
 
 const mapDispatchToProps = dispatch => {
     return ({
-        onSave: (user) => dispatch({type: "saveToProfile", user: user})
     });
 };
 

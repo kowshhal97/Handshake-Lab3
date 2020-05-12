@@ -434,6 +434,9 @@ const educationInputType = new GraphQLInputObjectType({
         major: {
             type: GraphQLString
         },
+        location:{
+            type:GraphQLString
+        },
         passing_year: {
             type: GraphQLString
         },

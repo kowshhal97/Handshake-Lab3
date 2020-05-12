@@ -5,6 +5,7 @@ const Student = require('./../models/student')
 
 apply = async (student,jobId,application_date) => {
 
+    console.log(student)
     try {
         if (student) {
             const post = await JobPost.findById(jobId)
@@ -12,17 +13,15 @@ apply = async (student,jobId,application_date) => {
                 return null
             }
             post.students.push(student)
-            await post.save()
+            await post.updateOne(post)
             const user = await Student.findById(student._id)
             const { companyName, job_title, job_posting_date, job_application_deadline, job_location, job_salary, job_description, job_category,job_requirements } = post
             const applicationId = post._id
             const status = 'Pending'
             user.applications.push({ applicationId, status, companyName, job_title, job_location, job_salary, job_description, job_category,job_posting_date,job_application_deadline,job_requirements,application_date });
-            await user.save()
-            
+            await user.updateOne(user)
             return user
         }
-        console.log("***")
 //         else {
 //             const post = await JobPost.findByIdAndUpdate(id, msg,{new:true})
 // return post
