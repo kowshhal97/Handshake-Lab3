@@ -13,6 +13,10 @@ import axios from 'axios';
 import CheckBoxIcon from '@material-ui/icons/CheckBox';
 import {connect} from 'react-redux';
 
+import { graphql } from 'react-apollo'
+import { gql } from 'apollo-boost';
+import * as compose from 'lodash.flowright';
+
 
 const DialogTitle = withStyles(theme => ({
     root: {
@@ -76,7 +80,7 @@ class CustomizedDialogDemo extends React.Component {
     };
 
 
-    apply = (e) => {
+    apply = async (e) => {
         var headers = new Headers();
         // e.preventDefault();
         let newDate = new Date();
@@ -91,27 +95,39 @@ class CustomizedDialogDemo extends React.Component {
         };
         console.log(data);
         axios.defaults.withCredentials = true;
-        axios.put('http://localhost:3000/applications/apply/' + this.props.jobId, data)
-            .then(response => {
-                this.props.onSave(response.data);
-                this.setState({open: false});
-                this.props.close(e);
-                console.log("Status Code : ", response.status);
-            }).catch(() => {
-            window.alert("FAIL")
-        });
-        const fd = new FormData();
-        fd.append('upl', this.state.Resume);
-        axios
-            .post(`http://localhost:3000/student/studentProfile/upload/resume/${(this.props.user._id)}`, fd)
-            .then(res => {
-                if (res.status === 200) {
 
-                }
-            })
-            .catch(err => {
-                window.alert("Fail")
-            });
+        let response = await this.props.applyToJob({
+            variables: {
+                
+                student: this.props.user,
+                jobId:this.props.jobId,
+                application_date:currentDate
+            }
+        })
+
+        console.log(response)
+
+        // axios.put('http://localhost:3000/applications/apply/' + this.props.jobId, data)
+        //     .then(response => {
+        //         this.props.onSave(response.data);
+        //         this.setState({open: false});
+        //         this.props.close(e);
+        //         console.log("Status Code : ", response.status);
+        //     }).catch(() => {
+        //     window.alert("FAIL")
+        // });
+        // const fd = new FormData();
+        // fd.append('upl', this.state.Resume);
+        // axios
+        //     .post(`http://localhost:3000/student/studentProfile/upload/resume/${(this.props.user._id)}`, fd)
+        //     .then(res => {
+        //         if (res.status === 200) {
+
+        //         }
+        //     })
+        //     .catch(err => {
+        //         window.alert("Fail")
+        //     });
 
 
     };
@@ -175,5 +191,19 @@ const mapStateToProps = state => {
     };
 };
 
+const applyToJob = gql`
+mutation applyToJobMutation($student:studentInput!,$jobId:String!,$application_date:String!){
+    applyToJob(student:$student,jobId:$jobId,application_date:$application_date)
+    {
+      _id
+    }
+  }
+`;
 
-export default connect(mapStateToProps, mapDispatchToProps)(CustomizedDialogDemo);
+
+
+
+export default compose(
+    graphql(applyToJob, { name: "applyToJob" }),
+    connect(mapStateToProps, mapDispatchToProps))(CustomizedDialogDemo);
+
