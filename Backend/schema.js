@@ -350,6 +350,9 @@ const RootQueryType = new GraphQLObjectType({
 const applicationInputType = new GraphQLInputObjectType({
     name: "ApplicationsInput",
     fields: () => ({
+        _id:{
+            type:GraphQLString
+        },
         applicationId: {
             type: GraphQLString
         },
@@ -472,7 +475,7 @@ const StudentInputType = new GraphQLInputObjectType({
             type: GraphQLString
         },
         contactNumber: {
-            type: GraphQLInt
+            type: GraphQLString
         },
         dateOfBirth: {
             type: GraphQLString
@@ -500,6 +503,9 @@ const StudentInputType = new GraphQLInputObjectType({
         applications: {
             type: new GraphQLList(applicationInputType),
             description: "All applied Jobs"
+        },
+        skillSet:{
+            type:new GraphQLList(GraphQLString)
         }
     })
 })

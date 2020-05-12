@@ -7,6 +7,9 @@ import * as serviceWorker from './serviceWorker';
 import { createStore } from 'redux'
 import { Provider } from 'react-redux'
 
+
+import { InMemoryCache } from 'apollo-cache-inmemory';
+
 import ApolloClient from 'apollo-boost';
 
 import { ApolloProvider } from 'react-apollo'
@@ -16,7 +19,10 @@ import reducer from './store/reducer'
 
 
 const client = new ApolloClient({
-    uri: "http://localhost:3000/graphql"
+    uri: "http://localhost:3000/graphql",
+    cache: new InMemoryCache({
+        addTypename: false
+      })
 });
 
 const store = createStore(reducer);

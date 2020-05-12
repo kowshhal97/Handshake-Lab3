@@ -69,14 +69,13 @@ class SimpleTabs extends React.Component {
             password: this.state.password
         };
 
-        console.log(data)
+  
         let response = await this.props.studentLoginMutation({
             variables: {
                 studentDetails: data
             }
         })
 
-        console.log(response)
         let user = {...response.data.studentLogin }
 
         this.props.onLogin(userType, user);

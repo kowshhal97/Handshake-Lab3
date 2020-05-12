@@ -106,7 +106,6 @@ class RecipeReviewCard extends React.Component {
     };
 
     render() {
-        console.log(this.props.user);
         const {classes} = this.props;
 
         return (
@@ -186,7 +185,7 @@ class RecipeReviewCard extends React.Component {
                             <Divider variant="inset" component="li"/>
                             {this.state.editBasicDetails ? (
                                 <TextField className={classes.textStyle} id="outlined-basic" label="City Name"
-                                           variant="outlined" defaultValue={this.props.user.name}
+                                           variant="outlined" defaultValue={this.props.user.city}
                                            onChange={this.props.changeCity}/>) : (<ListItem alignItems="flex-start">
                                 <ListItemAvatar>
                                     <Avatar alt="Travis Howard"

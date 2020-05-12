@@ -8,7 +8,6 @@ const initialState = {
 };
 
 const reducer = (state = initialState, action) => {
-    console.log(action);
     if (action.type === 'LOGOUT') {
         return {
             ...state,
