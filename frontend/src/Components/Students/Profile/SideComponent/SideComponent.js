@@ -46,17 +46,6 @@ class SideComponent extends Component {
     save = async () => {
         console.log(this.state)
 
-
-       let studentDetails={
-           name:this.state.name,
-           city:this.state.city,
-           careerObjective:this.state.careerObjective,
-           contactNumber:this.state.contactNumber,
-           dateOfBirth:this.state.dateOfBirth,
-           state:this.state.state,
-           country:this.state.country,
-           major:this.state.major
-       }
         let response = await this.props.updateStudent({
             variables: {
                 studentDetails: this.state,

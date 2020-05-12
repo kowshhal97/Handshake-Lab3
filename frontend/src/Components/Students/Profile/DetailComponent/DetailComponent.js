@@ -7,6 +7,10 @@ import AddForm from './AddForm';
 import Experience from './Experience';
 import AddExperienceForm from './AddExperienceForm'
 
+import * as compose from 'lodash.flowright';
+import { graphql } from 'react-apollo'
+import { gql } from 'apollo-boost';
+
 
 class DetailComponent extends Component {
     _isMounted = false;
@@ -36,17 +40,14 @@ class DetailComponent extends Component {
     };
 
     onAddSchool = (school) => {
-        school.id = this.state.education.length;
-        console.log(school);
+        school.id = this.state.education.length.toString();
         const list = [...this.state.education, school];
-        console.log(list);
         this.setState({education: list}, () => {
             this.save()
         });
     };
 
     onUpdateEducation = (education) => {
-        console.log(education);
         const data = this.state.education.map((item) => {
             if (item.id === education.id) {
                 return education
@@ -58,7 +59,6 @@ class DetailComponent extends Component {
         });
     };
     onUpdateExperience = (experience) => {
-        console.log(experience);
         const data = this.state.experience.map((item) => {
             if (item.id === experience.id) {
                 return experience
@@ -70,22 +70,23 @@ class DetailComponent extends Component {
         });
 
     };
-    save = () => {
+    save = async() => {
         let obj = this.state;
         delete obj.showAddForm;
         delete obj.showTextFrom;
         delete obj.showAddExperienceForm;
-        axios.put('http://localhost:3000/student/studentProfile/' + obj._id, obj)
-            .then(response => {
-                this.props.onSave(response.data)
-            }).catch(() => {
-            window.alert("FAIL")
+        console.log(obj)
+        let response = await this.props.updateStudent({
+            variables: {
+                studentDetails: obj,
+                id:this.state._id
+            }
         })
+        this.props.onSave(response.data.updateStudent)
     };
     onAddExperience = (experience) => {
-        experience.id = this.state.experience.length;
+        experience.id = this.state.experience.length.toString();
         const list = [...this.state.experience, experience];
-        console.log(list);
         this.setState({experience: list}, () => {
             this.save()
         });
@@ -155,5 +156,61 @@ const mapStateToProps = state => {
         user: state.user
     };
 };
+const updateStudent = gql`
+mutation updateStudent($studentDetails:studentInput!,$id:String!){
+    updateStudent(student:$studentDetails,id:$id)
+    {
+        _id
+        name
+        email
+        password
+        major
+        collegeName
+        contactNumber
+        dateOfBirth
+        city
+        state
+        country
+        careerObjective
+        skillSet
+        education {
+          id
+          institution_name
+          location
+          degree
+          major
+          passing_year
+          cgpa
+        }
+        experience {
+          id
+          company_name
+          designation
+          company_location
+          work_summary
+          starting_date
+          ending_date
+        }
+        applications{
+          _id
+          applicationId
+          status
+          companyName
+          job_title
+          job_location
+          job_salary
+          job_description
+          job_category
+          job_posting_date
+          job_application_deadline
+          job_requirements
+          application_date
+        }
+    }
+  }
+`;
 
-export default connect(mapStateToProps, mapDispatchToProps)(DetailComponent);
+
+
+export default compose( graphql(updateStudent, { name: "updateStudent" }),
+connect(mapStateToProps, mapDispatchToProps))(DetailComponent);
