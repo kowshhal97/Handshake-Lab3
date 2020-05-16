@@ -616,7 +616,7 @@ const RootMutationType = new GraphQLObjectType({
                 }
             },
             resolve: (parent, args) => {
-                postJob(args.jobPost)
+                return postJob(args.jobPost)
             }
         },
         applyToJob: {
@@ -634,7 +634,7 @@ const RootMutationType = new GraphQLObjectType({
                 }
             },
             resolve: (parent, args) => {
-                applyToJob(args.student, args.jobId, args.application_date)
+                return applyToJob(args.student, args.jobId, args.application_date)
             }
         },
         updateApplicationStatus: {
